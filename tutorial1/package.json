@@ -1,0 +1,12 @@
+{
+  "name": "tutorial1",
+  "version": "0.0.1",
+  "main": "index.js",
+  "dependencies": {
+    "crawler": "^1.0.2",
+    "node-fetch": "^1.6.3",
+    "url": "^0.11.0"
+  },
+  "author": "Jan Prášil",
+  "license": "MIT"
+}
