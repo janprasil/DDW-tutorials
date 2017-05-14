@@ -1,0 +1,4 @@
+
+> tutorial1@0.0.1 hw5 /Users/janprasil/git/DDW-tutorials
+> babel-node ./hw5/preprocess/index.js --presets es2015,stage-1
+
