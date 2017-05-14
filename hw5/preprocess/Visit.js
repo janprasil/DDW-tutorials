@@ -120,6 +120,15 @@ export default class Visit extends Record({
     };
   }
 
+  toCsvTopics(count, min) {
+    const res = {};
+    if (this.pages.length < min) return null;
+    for (let i = 0; i < count; i += 1) {
+      res[`topic${i}`] = this.pages[i] ? this.pages[i].TopicName : null;
+    }
+    return res;
+  }
+
   toCsvCluster(columns) {
     const upm = this.computeUPM().toJS();
 
@@ -145,11 +154,11 @@ const getHourString = (hour) => {
 }
 
 const spentTimeString = (time) => {
-  if (time < 40) {
+  if (time < 100) {
     return 'kratkaDoba'
-  } else if (time < 100) {
+  } else if (time < 300) {
     return 'stredniDoba'
-  } else if (time < 200) {
+  } else if (time < 600) {
     return 'delsiDoba'
   } else {
     return 'dlouhaDoba'
@@ -161,7 +170,7 @@ const pageNumString = (pageNum) => {
     return 'jedna'
   } else if (pageNum < 4) {
     return 'malo'
-  } else if (pageNum < 8) {
+  } else if (pageNum < 10) {
     return 'vice'
   } else {
     return 'hodne'

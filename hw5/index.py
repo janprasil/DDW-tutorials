@@ -113,6 +113,16 @@ def generate_conviction_rules(entries, supports, min_conf):
 
     printRules(rules);
 
+def printAll(entries, supports, min_conf):
+    print("CONFIDENCE:")
+    generate_confidence_rules(entries, supports, min_conf)
+    print("="*120)
+    print("LIFT:")
+    generate_lift_rules(entries, supports, min_conf)
+    print("="*120)
+    print("CONVICTION:")
+    generate_conviction_rules(entries, supports, min_conf)
+
 #####################################################################################################
 
 df = pd.read_csv("./out/out.csv")
@@ -121,22 +131,28 @@ del df["hour"]
 del df["spentTime"]
 del df["visitId"]
 del df["pageNum"]
-#df["income"] = pd.cut(df["income"],10)
+
 dataset = []
 for index, row in df.iterrows():
     row = [col+"="+str(row[col]) for col in list(df)]
     dataset.append(row)
 
-frequent_itemsets, supports = apriori(dataset, 0.4)
+frequent_itemsets, supports = apriori(dataset, 0.01)
 entries = generate_confidence(frequent_itemsets)
 
-print("="*120)
-print("CONFIDENCE:")
-generate_confidence_rules(entries, supports, 0.7)
-print("="*120)
-print("LIFT:")
-generate_lift_rules(entries, supports, 0.7)
-print("="*120)
-print("CONVICTION:")
-generate_conviction_rules(entries, supports, 0.7)
+printAll(entries, supports, 0.5)
+
+dataset = []
+df = pd.read_csv("./out/topics.csv")
+for index, row in df.iterrows():
+    newrow = []
+    for col in list(df):
+        if row[col] == row[col]:
+            newrow.append(row[col])
+    dataset.append(newrow)
+
+frequent_itemsets, supports = apriori(dataset, 0.01)
+entries = generate_confidence(frequent_itemsets)
+
+printAll(entries, supports, 0.5)
 

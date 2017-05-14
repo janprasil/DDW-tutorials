@@ -12,3 +12,4 @@ export const searchEngineStream = fs.createReadStream('./hw5/data/search_engine_
 export const visitorsStream = fs.createReadStream('./hw5/data/visitors.csv');
 export const writableStream = fs.createWriteStream('./hw5/out/out.csv');
 export const writableStreamCluster = fs.createWriteStream('./hw5/out/cluster.csv');
+export const writableStreamTopics = fs.createWriteStream('./hw5/out/topics.csv');

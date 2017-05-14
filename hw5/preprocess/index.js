@@ -1,12 +1,23 @@
 import * as Data from './data';
 import csv from 'fast-csv';
 import Visit from './Visit';
+import kmeans from 'kmeansjs';
 
 const writeOutput = () => {
   const csvStream = csv.createWriteStream({ headers: true });
   csvStream.pipe(Data.writableStream);
   Data.visits.forEach(x => {
     csvStream.write(x.toCsvOutput());
+  });
+  csvStream.end();
+};
+
+const writeOutputTopics = () => {
+  const csvStream = csv.createWriteStream({ headers: true });
+  csvStream.pipe(Data.writableStreamTopics);
+  Data.visits.forEach(x => {
+    const d = x.toCsvTopics(15, 7);
+    if (d) csvStream.write(d);
   });
   csvStream.end();
 };
@@ -20,10 +31,28 @@ const writeClusterOutput = () => {
     c.forEach(y => columns.add(y));
   })
   const col = Array.from(columns);
+  const matrix = [];
+  let length = 0;
   Data.visits.forEach(x => {
-    csvStream.write(x.toCsvCluster(col));
+    const y = x.toCsvCluster(col);
+    csvStream.write(y);
+    // console.log(y);
+    matrix.push(Object.keys(y).map(j => y[j]));
+    length = Object.keys(y).length;
   });
   csvStream.end();
+
+  kmeans(matrix, length, function(err, res) {
+    if (err) throw new Error(err)
+    res.forEach(k => {
+      //console.log(k);
+      //console.log('=====================');
+    })
+
+      //console.log(res)
+      //do something with the result
+  })
+
 }
 
 const runClicks = () =>
@@ -60,6 +89,7 @@ const runVisitors = () => 
       Data.visits.forEach(x => x.computeUPM());
       writeOutput();
       writeClusterOutput();
+      writeOutputTopics();
     })
 
 const runReferrer = () =>
